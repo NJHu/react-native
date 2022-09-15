@@ -66,7 +66,6 @@ exec('git checkout -- .');
 // remove all the untracked files
 exec('git clean -fdx');
 
-
 console.info(
   '\n** Clean up process completed\nPlease remember to run yarn install if you are planning to test again\n',
 );
