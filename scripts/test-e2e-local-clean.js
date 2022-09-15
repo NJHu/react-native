@@ -61,9 +61,11 @@ exec('rm -rf /tmp/RNTestProject');
 
 // final clean up
 console.info('\n** Final git level wipe **\n');
-exec('git clean -fdx');
 // clean unstaged changes from git
 exec('git checkout -- .');
+// remove all the untracked files
+exec('git clean -fdx');
+
 
 console.info(
   '\n** Clean up process completed\nPlease remember to run yarn install if you are planning to test again\n',
