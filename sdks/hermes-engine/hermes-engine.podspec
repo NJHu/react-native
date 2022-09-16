@@ -16,6 +16,8 @@ version = package['version']
 isInCI = ENV['CI'] == true
 hermestag_file = File.join(__dir__, "..", ".hermesversion")
 
+ENV['REACT_NATIVE_PATH'] = File.join(__dir__, "..", "..")
+
 # We need to check the current git branch/remote to verify if
 # we're on a React Native release branch to actually build Hermes.
 currentbranch, err = Open3.capture3("git rev-parse --abbrev-ref HEAD")
@@ -69,17 +71,20 @@ Pod::Spec.new do |spec|
     spec.prepare_command = <<-EOS
       # When true, debug build will be used.
       # See `build-apple-framework.sh` for details
-      DEBUG=#{HermesHelper::BUILD_TYPE == :debug}
+      export DEBUG=#{HermesHelper::BUILD_TYPE == :debug}
+      export RELEASE_VERSION="#{version}"
+      export IOS_DEPLOYMENT_TARGET="#{spec.deployment_target('ios')}"
+      export MAC_DEPLOYMENT_TARGET="#{spec.deployment_target('osx')}"
 
       # Set HERMES_OVERRIDE_HERMESC_PATH if pre-built HermesC is available
       #{File.exist?(import_hermesc_file) ? "export HERMES_OVERRIDE_HERMESC_PATH=#{import_hermesc_file}" : ""}
       #{File.exist?(import_hermesc_file) ? "echo \"Overriding HermesC path...\"" : ""}
 
       # Build iOS framework
-      ./utils/build-ios-framework.sh
+      $REACT_NATIVE_PATH/sdks/hermes-engine/utils/build-ios-framework.sh
 
       # Build Mac framework
-      ./utils/build-mac-framework.sh
+      $REACT_NATIVE_PATH/sdks/hermes-engine/utils/build-mac-framework.sh
     EOS
   end
 end
