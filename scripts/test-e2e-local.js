@@ -27,6 +27,15 @@ const {
 
 const {generateAndroidArtifacts} = require('./release-utils');
 
+// setting this just 'cause this https://github.com/facebook/react-native/commit/0a3ca80af401654896cbc73e235711eef0f9b3c5
+// breaks a bunch of stuff. This should be enough.
+// TODO: follow up with Nicola in understanding the impact of the commit, and if we can remove this
+// also, remove the folder
+process.env.TMP_PUBLISH_DIR = fs.mkdtempSync(
+  path.join(os.tmpdir(), 'rn-publish-'),
+);
+console.info(`The temp folder is ${process.env.TMP_PUBLISH_DIR}`);
+
 const argv = yargs
   .option('t', {
     alias: 'target',
