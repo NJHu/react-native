@@ -16,8 +16,6 @@ version = package['version']
 isInCI = ENV['CI'] == true
 hermestag_file = File.join(__dir__, "..", ".hermesversion")
 
-ENV['REACT_NATIVE_PATH'] = File.join(__dir__, "..", "..")
-
 # We need to check the current git branch/remote to verify if
 # we're on a React Native release branch to actually build Hermes.
 currentbranch, err = Open3.capture3("git rev-parse --abbrev-ref HEAD")
@@ -78,10 +76,10 @@ Pod::Spec.new do |spec|
       #{File.exist?(import_hermesc_file) ? "echo \"Overriding HermesC path...\"" : ""}
 
       # Build iOS framework
-      $REACT_NATIVE_PATH/sdks/hermes-engine/utils/build-ios-framework.sh
+      ./utils/build-ios-framework.sh
 
       # Build Mac framework
-      $REACT_NATIVE_PATH/sdks/hermes-engine/utils/build-mac-framework.sh
+      ./utils/build-mac-framework.sh
     EOS
   end
 end
