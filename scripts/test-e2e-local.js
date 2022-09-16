@@ -18,6 +18,9 @@
 
 const {exec, exit, pushd, popd, pwd, cd} = require('shelljs');
 const yargs = require('yargs');
+const fs = require('fs');
+const path = require('path');
+const os = require('os');
 
 const {
   launchAndroidEmulator,
